@@ -1,0 +1,84 @@
+# @package _global_
+
+# General Experiment Settings
+general:
+  name: 'planar_grpo'
+  swanlab: 'disabled'
+
+# Dataset Settings (Planar / SPECTRE)
+dataset:
+  name: "planar"
+  datadir: "data/planar/"
+  pin_memory: false
+
+# GRPO Specific Configuration
+grpo:
+  mode: "flow_grpo"
+  target_task: "planar"
+
+  # Pretrained Checkpoint (User must provide this for fine-tuning)
+  pretrained_checkpoint: null  # Set path to your pretrained checkpoint
+  resume_from_checkpoint: null
+  # RL / Optimization
+  learning_rate: 1e-5
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 1e-4
+  adam_epsilon: 1e-8
+  warmup_steps: 0      # Learning rate warmup steps (gradually increase LR over first steps)
+  total_steps: 100000
+
+  num_batches_per_epoch: 1  # Number of sampling batches per epoch
+  group_size: 60               # Number of trajectories per GRPO group
+  concurrent_sampling_groups: 40   # ORCA/NetworkX reward is CPU-heavy; keep this moderate
+  sample_group_num: 40       # Number of groups to sample per epoch
+  eval_interval: 1000
+  enable_visualization: false
+
+  train_batch_size: 5
+  num_inner_epochs: 1       # Inner training epochs (Flow-GRPO feature) - Increase to 2 for better utilization
+  forward_steps: 50    # Flow-GRPO forward inference/sampling steps (defaults to sample config)
+  train_max_steps: 50      # Only train last N steps to reduce VRAM/speed up (sampling records trajectory for this window)
+
+
+  shuffle_training_batches: true # Shuffle sample order during inner epoch training
+
+  kl_penalty: 0.005          # Reduce KL to let it drift further from prior
+  entropy_coef: 0.0
+  clip_ratio_lower: 0.2
+  clip_ratio_upper: 0.28
+  adv_clip_max: 5.0        # Advantage clipping maximum
+
+  lr_decay_threshold: 0.8
+  lr_decay_window: 1
+  lr_decay_factor: 0.5
+  lr_decay_min: 1e-6
+  positive_advantage_weight: 1.0
+  per_config_stat_tracking: true  # Use per-config statistics
+  target_node_count: 64   # Planar-64
+
+  # Reward & Rate Matrix
+  reward_type: "planar_graph"
+  use_dense_reward: false    # Toggle for Dense Reward Calculation
+  use_continuous_rate_matrix: true
+  gradient_accumulation_steps: 40
+  max_grad_norm: 5.0  # Increase from 1.0 to let aggressive updates happen 
+  num_reward_workers: 2
+  enable_dynamic_p0: true
+  dynamic_p0_alpha: 0.05
+
+  save_every_n_epoch: 10
+  use_grpo_step_probs_for_sampling: false
+  sampling_temperature: 1.0
+
+  round0_samples: 300      # Round0 sampling count (smaller = faster entry into refine)
+  refine_topk: 0           # Top-K base molecules for refinement
+  refine_topk_early: 0
+  refine_topk_late: 0
+  refine_num_vars_early: 120
+  refine_num_vars_late: 500
+  refine_switch_budget: 2000
+  noise_fraction_early: 0.25
+  noise_fraction_late: 0.2
+  noise_switch_budget: 2000
+  early_stop_patience: 10000

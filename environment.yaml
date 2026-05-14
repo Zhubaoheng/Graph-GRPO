@@ -1,0 +1,67 @@
+name: graph-grpo
+
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python=3.12
+  - pip
+
+  # Compiled packages used by graph metrics and docking workflows.
+  - graph-tool
+  - openbabel
+  - vina
+  - meeko
+
+  # Keep the compiled scientific stack in conda so graph-tool and SciPy
+  # do not leave conflicting binary extensions in site-packages.
+  - numpy=1.26.4
+  - scipy=1.14.1
+  - pandas=2.2.3
+  - pytz=2025.2
+  - matplotlib=3.9.4
+  - scikit-learn=1.6.1
+
+  - pip:
+      # PyTorch 2.8.0 Linux wheels install CUDA 12.8 runtime packages.
+      - torch==2.8.0
+      - torchvision==0.23.0
+      - torchaudio==2.8.0
+
+      # Project runtime.
+      - imageio==2.37.0
+      - networkx==3.6.1
+      - tqdm==4.67.1
+      - seaborn==0.13.2
+      - openpyxl==3.1.5
+      - rich==13.9.4
+      - requests==2.33.1
+      - PyYAML==6.0.3
+
+      - hydra-core==1.3.2
+      - omegaconf==2.3.0
+      - pytorch-lightning==2.0.4
+      - torchmetrics==0.11.4
+      - torch-geometric==2.7.0
+      - overrides==7.7.0
+      - PyGSP==0.6.1
+      - pyemd==1.0.0
+      - rdkit==2023.9.6
+      - docopt==0.6.2
+      - git+https://github.com/PatWalters/rd_filters.git@11a3b31f5b3669834bb916d8ed4422e69e455211
+
+      # PyTDC support packages. Install pytdc itself with --no-deps after env creation.
+      - fuzzywuzzy==0.18.0
+      - huggingface-hub==0.36.2
+      - transformers==4.50.3
+      - datasets==2.19.2
+      - evaluate==0.4.2
+      - accelerate==0.33.0
+
+      # Logging and utilities.
+      - wandb==0.19.11
+      - swanlab[dashboard]==0.7.2
+      - peewee<4
+      - gpustat==1.1.1
+      - setuptools<81

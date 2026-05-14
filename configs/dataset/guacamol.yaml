@@ -1,0 +1,6 @@
+name: 'guacamol'
+datadir: 'data/guacamol/guacamol_pyg/'       # Relative to the guacamol_dataset.py file
+split: 'original'                                  # 'ood' uses guacamol_dataset_ood, 'original' uses guacamol_dataset
+remove_h: null
+filter: True                      # Use the filtered version or the raw guacamol file
+compute_fcd: True                 # Compute FCD scores

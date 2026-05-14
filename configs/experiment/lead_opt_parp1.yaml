@@ -1,0 +1,15 @@
+# @package _global_
+defaults:
+  - /experiment: debug
+  - _self_
+
+general:
+  name: "lead_opt_parp1"
+
+grpo:
+  reward_type: "lead_opt"
+  target_name: "parp1"
+  seed_idx: 0
+  sim_threshold: 0.4
+  refine_seed_smiles:
+    - "CN(C)Cc3ccc2c(CNC(=O)c1cccn12)c3"

@@ -1,0 +1,94 @@
+# @package _global_
+
+# General Experiment Settings
+general:
+  name: 'jnk3'
+  swanlab: 'local'
+
+# Dataset Settings (In-Distribution / MPO)
+dataset:
+  name: "zinc250k"
+  datadir: "data/zinc/"
+  remove_h: true
+  aromatic: false
+  compute_fcd: false
+  empty: true
+  pin_memory: false
+
+# GRPO Specific Configuration
+grpo:
+  mode: "flow_grpo"
+  target_task: "jnk3"
+
+  # Pretrained Checkpoint (User must provide this for fine-tuning)
+  pretrained_checkpoint: null  # Set path to your pretrained checkpoint
+  resume_from_checkpoint:
+  # RL / Optimization
+  learning_rate: 2e-5
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 1e-4
+  adam_epsilon: 1e-8
+  warmup_steps: 0      # Learning rate warmup steps (gradually increase LR over first steps)
+  total_steps: 1000
+
+  num_batches_per_epoch: 1  # Number of sampling batches per epoch
+  group_size: 60              # Number of trajectories per GRPO group
+  concurrent_sampling_groups: 120   # Number of concurrent sampling groups
+  sample_group_num: 120      # Number of groups to sample per epoch
+  eval_interval: 500
+
+  train_batch_size: 20
+  num_inner_epochs: 1       # Inner training epochs (Flow-GRPO feature) - Increase to 2 for better utilization
+  forward_steps: 100       # Flow-GRPO forward inference/sampling steps (defaults to sample config)
+  train_max_steps: 50      # Only train last N steps to reduce VRAM/speed up (sampling records trajectory for this window)
+
+  shuffle_training_batches: true # Shuffle sample order during inner epoch training
+
+  kl_penalty: 0.005        # Reduce KL to let it drift further from prior
+  entropy_coef: 0.0
+  clip_ratio_lower: 0.2
+  clip_ratio_upper: 0.28
+  adv_clip_max: 5.0        # Advantage clipping maximum
+
+  
+  lr_decay_threshold: 0.7
+  lr_decay_window: 1
+  lr_decay_factor: 0.5
+  lr_decay_min: 1.0e-5
+  positive_advantage_weight: 1.0
+  per_config_stat_tracking: true  # Use per-config statistics
+  node_count_min: 6
+  node_count_max: 38
+  enable_dynamic_node_dist: true
+  dynamic_node_dist_alpha: 0.05
+  dynamic_node_dist_reward_threshold: 0.001
+  dynamic_node_dist_buffer_size: 1000
+
+
+  # Reward & Rate Matrix
+  reward_type: "tdc_oracle"
+  tdc_oracle: "jnk3"
+  use_dense_reward: false    # Toggle for Dense Reward Calculation
+  use_continuous_rate_matrix: true
+  gradient_accumulation_steps: 10
+  max_grad_norm: 5.0  # Increase from 1.0 to let aggressive updates happen 
+  num_reward_workers: 22
+  enable_dynamic_p0: true
+  dynamic_p0_alpha: 0.05
+
+  save_every_n_epoch: 10
+  use_grpo_step_probs_for_sampling: true
+  sampling_temperature: 1.0
+
+  round0_samples: 300      # Round0 sampling count (smaller = faster entry into refine)
+  refine_topk: 5           # Top-K base molecules for refinement
+  refine_topk_early: 5
+  refine_topk_late: 3
+  refine_num_vars_early: 120
+  refine_num_vars_late: 500
+  refine_switch_budget: 2000
+  noise_fraction_early: 0.25
+  noise_fraction_late: 0.2
+  noise_switch_budget: 2000
+  early_stop_patience: 10000
