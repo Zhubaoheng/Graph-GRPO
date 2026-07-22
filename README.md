@@ -26,6 +26,10 @@
 
 ---
 
+## Updates
+
+- **2026-07-23:** Pretrained and RL-finetuned checkpoints are now available on [Hugging Face](https://huggingface.co/BaohengZhu/Graph-GRPO-checkpoints).
+
 ## TL;DR
 
 Graph-GRPO is an online RL framework for **aligning graph flow models (GFMs) with verifiable rewards**. It derives an **analytic transition probability** that makes GFM rollouts fully differentiable (replacing Monte Carlo sampling of DeFoG), and pairs it with an **iterative refinement strategy** that explores high-potential regions of chemical space. With only **50 denoising steps**, Graph-GRPO reaches **95.0 / 97.5 V.U.N.** on Planar / Tree and achieves SOTA on the **PMO** and **structure-based docking** benchmarks.
@@ -62,7 +66,7 @@ Tested on **Python 3.12 + PyTorch 2.8 + CUDA 12.8** on a single NVIDIA RTX PRO 6
 
 The base GFM is a [DeFoG](https://github.com/manuelmlmadeira/DeFoG)-style discrete flow model pretrained on ZINC250k (for molecular tasks) or on the corresponding synthetic dataset (for Planar / Tree). Place it under `checkpoint/<task>.ckpt`. Drop-in pretrained weights from the DeFoG release work directly.
 
-> **Checkpoints coming soon.** All pretrained and RL-finetuned task checkpoints will be released shortly.
+> **Checkpoints released.** Download all pretrained and RL-finetuned task checkpoints from [Hugging Face](https://huggingface.co/BaohengZhu/Graph-GRPO-checkpoints).
 
 ### 3. Run a task
 
